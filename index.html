@@ -1,0 +1,258 @@
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>상품 문의</title>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="https://kit.fontawesome.com/064567d6a5.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="./js/index.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/include/header.css" />
+<link rel="stylesheet" type="text/css" href="../css/include/footer.css" />
+<title></title>
+<style>
+  .hidden {
+      display: none;
+  }
+  </style>
+  </head>
+</head>
+<body>
+
+<header>
+	<div>
+		<ul class="CartLeft">
+			
+			<li class="cart">
+				<div class="CartBtn">
+					<a href="#"><button id="cartbtn"><i class="fa-solid fa-list"></i></button></a>
+				</div>
+			</li>
+			<div id="cart-bg">
+				<div class="HeaderCart">
+					<h3><strong>카테고리</strong></h3>
+					<ul class="HCartList">
+						<li class="HeaderItem">
+							<a href="Outer">아우터</a>&nbsp;&nbsp;
+							<a href="Top">상의</a>&nbsp;&nbsp;
+							<a href="Shirt">셔츠</a>&nbsp;&nbsp;
+							<a href="Bottom">하의</a>
+						</li>
+					</ul>
+				</div>
+				<div class="HeaderCart">
+					<h3>계정</h3>
+					<ul class="HCartList">
+						<li class="HeaderItem">
+							<a href="Login">내 정보</a>&nbsp;&nbsp;
+							<a href="Basket">장바구니</a>&nbsp;&nbsp;
+							<a href="#">주문확인</a>
+						</li>
+					</ul>
+				</div>
+				<div class="HeaderCart">
+					<h3>고객센터</h3>
+					<ul class="HCartList">
+						<li class="HeaderItem">
+							<a href="Question">자주 묻는 질문</a>&nbsp;&nbsp;
+							<a href="userbbs_list">상품 문의</a>&nbsp;&nbsp;
+							<a href="Notice">공지사항</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</ul>
+	</div>
+	<div class="MainLogo">
+		
+		<a href="Index"><strong>Mango</strong></a>
+	</div>
+		<div>
+			<nav class="cartrightnav">
+				<ul class="CartRight">
+					
+					<li>
+						<div class="SearchBtn">
+							<a href="#"><button id="btn"><i class="fa-solid fa-magnifying-glass"></i></button></a>
+						</div>
+					</li>
+					<div id="search-bg"><input type="search" placeholder="search"></div>
+					
+					<li><a onclick="location='Login';"><i class="fa-solid fa-user"></i></a></li>
+					
+					<li><a href="#"><i class="fa-solid fa-heart"></i></a></li>
+					
+					<li><a href="Basket"><i class="fa-solid fa-basket-shopping"></i></a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+
+</head>
+<body>
+  <form method="get" action="userbbs_list">
+    <div class="inquiry-board">
+        <div class="QuestionLeftMenu">
+            <ul>
+                <li><a href="Question">자주하는 질문</a></li>
+                <li><a href="Notice">공지사항</a></li>
+                <li><a href="userbbs_list">상품문의</a></li>
+            </ul>
+        </div>
+        <h2>Product inquiry</h2>
+        <table class="table_basic">
+            <colgroup>
+                <col width="8%">         
+                <col width="*">
+                <col width="15%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">번호</th>
+                    <th scope="col">내용</th>
+                    <th scope="col">등록일</th>
+                </tr>
+            </thead>
+            <tbody id="contentTable">
+                <tr>
+                    <td align="center">5</td>
+                    <td class="left-align">
+                        <a href="userbbs_cont?userbbs_no=188&state=cont&page=1">
+                            열
+                        </a>
+                    </td>
+                    <td align="center">2024-06-05</td>
+                </tr>
+                <tr>
+                    <td align="center">4</td>
+                    <td class="left-align">
+                        <a href="userbbs_cont?userbbs_no=187&state=cont&page=1">
+                            아홉
+                        </a>
+                    </td>
+                    <td align="center">2024-06-05</td>
+                </tr>
+                <tr>
+                    <td align="center">3</td>
+                    <td class="left-align">
+                        <a href="userbbs_cont?userbbs_no=185&state=cont&page=1">
+                            일곱
+                        </a>
+                    </td>
+                    <td align="center">2024-06-05</td>
+                </tr>
+                <tr>
+                    <td align="center">2</td>
+                    <td class="left-align">
+                        <a href="userbbs_cont?userbbs_no=179&state=cont&page=1">
+                            셋
+                        </a>
+                    </td>
+                    <td align="center">2024-06-05</td>
+                </tr>
+                <tr>
+                    <td align="center">1</td>
+                    <td class="left-align">
+                        <a href="userbbs_cont?userbbs_no=178&state=cont&page=1">
+                            둘
+                        </a>
+                    </td>
+                    <td align="center">2024-06-05</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div id="user_bList_paging">
+            [이전]&nbsp;<1>[다음]
+        </div>
+
+        <div id="user_bList_menu">          
+            <input type="button" value="전체목록" onclick="location='userbbs_list?page=1';">
+        </div>
+
+        <!-- 검색 폼 -->
+        <div id="user_bFind_wrap">
+            <select name="find_field">
+                <option value="userbbs_title">제목</option>
+                <option value="userbbs_cont">내용</option>
+            </select>
+            <input type="search" name="find_name" id="find_name" size="14" onkeyup="filterTable()" placeholder="검색어를 입력하세요">
+        </div>
+    </div>      	
+</form>
+
+<div class="form-actions">
+    <button type="submit" onclick="location='userbbs_write';">작성하기</button>
+</div>
+
+<footer class="FooterContainer" style="white-space:nowrap;">
+    <div class="FooterTop">
+        <div class="FooterCart">
+            <h3>카테고리</h3>
+            <ul class="FCartList">
+                <li class="FooterItem">
+                    <a href="Outer">아우터</a>&nbsp;&nbsp;
+                    <a href="Top">상의</a>&nbsp;&nbsp;
+                    <a href="Shirt">셔츠</a>&nbsp;&nbsp;
+                    <a href="Bottom">하의</a>
+                </li>
+            </ul>
+        </div>
+        <div class="FooterCart">
+            <h3>계정</h3>
+            <ul class="FCartList">
+                <li class="FooterItem">
+                    <a href="Login">내 정보</a>&nbsp;&nbsp;
+                    <a href="Basket">장바구니</a>&nbsp;&nbsp;
+                    <a href="#">주문확인</a>
+                </li>
+            </ul>
+        </div>
+        <div class="FooterCart">
+            <h3>고객센터</h3>
+            <ul class="FCartList">
+                <li class="FooterItem">
+                    <a href="Question">자주 묻는 질문</a>&nbsp;&nbsp;
+                    <a href="userbbs_list">상품 문의</a>&nbsp;&nbsp;
+                    <a href="Notice">공지사항</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="CopyRight">
+        <p>Copyright © MANGO Corp. All Rights Reserved.</p>
+        <p><small>프로젝트 인원 : 김동훈, 김창우, 성유철, 이정균</small></p>
+    </div>
+</footer>
+<script>
+  function filterTable() {
+      const searchInput = document.getElementById('find_name').value.toLowerCase();
+      const tableRows = document.querySelectorAll('#contentTable tr');
+      tableRows.forEach(row => {
+          const cell = row.querySelector('.left-align');
+          if (cell) {
+              const text = cell.textContent.toLowerCase();
+              if (text.includes(searchInput)) {
+                  row.classList.remove('hidden');
+              } else {
+                  row.classList.add('hidden');
+              }
+          }
+      });
+  }
+  </script>
+  
+</body>
+</html>
+</body>
+</html>
