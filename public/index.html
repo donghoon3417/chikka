@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>당구 랭킹</title>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- 🔥 Firebase 연결 -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBmHonmZ4mIWz84yh3KGvjvKgdHPMzkJqk",
+        authDomain: "chikka-73d5a.firebaseapp.com",
+        projectId: "chikka-73d5a",
+        storageBucket: "chikka-73d5a.firebasestorage.app",
+        messagingSenderId: "522922138715",
+        appId: "1:522922138715:web:f37edcded4e3b496b9337e",
+      };
+
+      const app = initializeApp(firebaseConfig);
+
+      window.db = getFirestore(app);
+      window.auth = getAuth(app);
+    </script>
+  </head>
+
+  <body>
+    <h2>당구 랭킹</h2>
+
+    <!-- 🔹 로그인 -->
+    <div id="loginPage">
+      <input id="id" placeholder="아이디" />
+      <input id="pw" type="password" placeholder="비밀번호" />
+
+      <button id="mypageBtn" onclick="showMyPage()" style="display: none">
+        마이페이지
+      </button>
+      <button id="authBtn" onclick="login()">로그인</button>
+      <button onclick="showSignup()">회원가입</button>
+    </div>
+
+    <!-- 🔹 회원가입 -->
+    <div id="signupPage" style="display: none">
+      <h3>회원가입</h3>
+
+      <input id="s_id" placeholder="아이디" />
+      <input id="s_name" placeholder="닉네임" />
+      <!-- 🔥 추가 -->
+      <input id="s_pw" type="password" placeholder="비밀번호" />
+
+      <input id="s_score4" placeholder="4구 점수" />
+      <input id="s_score3" placeholder="3구 점수" />
+      <input id="s_hr4" placeholder="4구 하이런" />
+      <input id="s_hr3" placeholder="3구 하이런" />
+      <input id="s_place" placeholder="당구장" />
+
+      <button onclick="signup()">가입하기</button>
+      <button onclick="showLogin()">뒤로가기</button>
+    </div>
+
+    <hr />
+
+    <!-- 🔹 마이페이지 -->
+    <div id="mypage" style="display: none; margin-top: 20px">
+      <h3>마이페이지</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>값</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>아이디</td>
+            <td><input id="m_id" disabled /></td>
+          </tr>
+          <tr>
+            <td>4구 점수</td>
+            <td><input id="m_score4" /></td>
+          </tr>
+          <tr>
+            <td>3구 점수</td>
+            <td><input id="m_score3" /></td>
+          </tr>
+          <tr>
+            <td>4구 하이런</td>
+            <td><input id="m_hr4" /></td>
+          </tr>
+          <tr>
+            <td>3구 하이런</td>
+            <td><input id="m_hr3" /></td>
+          </tr>
+          <tr>
+            <td>당구장</td>
+            <td><input id="m_place" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br />
+
+      <button onclick="updateMyInfo()">수정 저장</button>
+      <button onclick="closeMyPage()">닫기</button>
+    </div>
+
+    <hr />
+
+    <!-- 🔹 랭킹 -->
+    <h3>랭킹</h3>
+    <button onclick="loadRanking(4)">4구</button>
+    <button onclick="loadRanking(3)">3구</button>
+
+    <table id="rankingTable">
+      <thead>
+        <tr>
+          <th>순위</th>
+          <th>닉네임</th>
+          <!-- 🔥 변경 -->
+          <th>등급</th>
+          <th>점수</th>
+          <th>하이런</th>
+          <th>당구장</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <hr />
+
+    <!-- 🔹 관리자 -->
+    <div id="userSection" style="display: none">
+      <h3>회원 목록</h3>
+      <button onclick="loadUsers()">회원 불러오기</button>
+
+      <table id="userTable">
+        <thead>
+          <tr>
+            <th>순번</th>
+            <th>아이디</th>
+            <th>닉네임</th>
+            <!-- 🔥 추가 -->
+            <th>4구</th>
+            <th>3구</th>
+            <th>4구HR</th>
+            <th>3구HR</th>
+            <th>삭제</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- 🔥 JS 연결 (순서 중요) -->
+    <script type="module" src="login.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="mypage.js"></script>
+  </body>
+</html>
