@@ -1,13 +1,18 @@
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// 🔹 마이페이지 열기
 export async function showMyPage() {
 
-  if (!auth.currentUser) {
+  const userStr = localStorage.getItem("user");
+
+  if (!userStr) {
     alert("로그인 필요");
     return;
   }
 
-  const docRef = doc(db, "users", auth.currentUser.uid);
+  const user = JSON.parse(userStr);
+
+  const docRef = doc(db, "users", user.docId);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) {
@@ -27,12 +32,19 @@ export async function showMyPage() {
   document.getElementById("mypage").style.display = "block";
 }
 
+// 🔹 정보 수정
 export async function updateMyInfo() {
 
-  const docRef = doc(db, "users", auth.currentUser.uid);
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    alert("로그인 필요");
+    return;
+  }
+
+  const docRef = doc(db, "users", user.docId);
 
   await updateDoc(docRef, {
-    displayName: m_name.value || "",
     score4: Number(m_score4.value) || 0,
     score3: Number(m_score3.value) || 0,
     highrun4: Number(m_hr4.value) || 0,
@@ -46,11 +58,12 @@ export async function updateMyInfo() {
   closeMyPage();
 }
 
+// 🔹 닫기
 export function closeMyPage() {
   document.getElementById("mypage").style.display = "none";
 }
 
-// 👉 HTML onclick 대응
+// 👉 HTML 연결
 window.showMyPage = showMyPage;
 window.updateMyInfo = updateMyInfo;
 window.closeMyPage = closeMyPage;
