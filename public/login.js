@@ -1,8 +1,7 @@
 import {
     doc,
     getDoc,
-    setDoc,
-    runTransaction
+    setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -32,7 +31,7 @@ async function signup() {
             return;
         }
 
-        const email = username + "@chikka.com";
+        const email = toEmail(username);
 
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -73,9 +72,13 @@ async function login() {
 
         currentUser = userCred.user;
 
-        // 사용자 데이터 가져오기
         const docSnap = await getDoc(doc(db, "users", currentUser.uid));
         currentUserData = docSnap.data();
+
+        // 🔥 로그인 유지용 저장
+        localStorage.setItem("user", JSON.stringify({
+            uid: currentUser.uid
+        }));
 
         alert("로그인 성공");
 
@@ -97,19 +100,33 @@ async function logout() {
     currentUser = null;
     currentUserData = null;
 
+    // 🔥 로컬 제거
+    localStorage.removeItem("user");
+
     alert("로그아웃");
 
     setLoginUI(false);
 }
 
-// 🔹 로그인 상태 자동 유지 (중요)
+// 🔹 로그인 상태 자동 유지 (핵심)
 onAuthStateChanged(auth, async (user) => {
 
     if (user) {
         currentUser = user;
 
         const docSnap = await getDoc(doc(db, "users", user.uid));
-        currentUserData = docSnap.data();
+
+        if (docSnap.exists()) {
+            currentUserData = docSnap.data();
+        } else {
+            console.warn("유저 데이터 없음");
+            currentUserData = null;
+        }
+
+        // 🔥 로컬 동기화
+        localStorage.setItem("user", JSON.stringify({
+            uid: user.uid
+        }));
 
         setLoginUI(true);
 
@@ -118,6 +135,8 @@ onAuthStateChanged(auth, async (user) => {
     } else {
         currentUser = null;
         currentUserData = null;
+
+        localStorage.removeItem("user");
 
         setLoginUI(false);
     }
@@ -139,7 +158,7 @@ function setLoginUI(isLogin) {
 
         mypageBtn.style.display = "inline-block";
 
-        // 🔥 관리자만 보이기
+        // 🔥 관리자 체크 강화
         if (currentUserData && currentUserData.role === "admin") {
             userSection.style.display = "block";
             if (window.loadUsers) loadUsers();

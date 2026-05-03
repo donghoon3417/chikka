@@ -41,6 +41,9 @@
       </button>
       <button id="authBtn" onclick="login()">로그인</button>
       <button onclick="showSignup()">회원가입</button>
+      <button onclick="deleteMyAccount()" style="background: red; color: white">
+        회원탈퇴
+      </button>
     </div>
 
     <!-- 🔹 회원가입 -->
@@ -79,6 +82,10 @@
           <tr>
             <td>아이디</td>
             <td><input id="m_id" disabled /></td>
+          </tr>
+          <tr>
+            <td>닉네임</td>
+            <td><input id="m_displayName" /></td>
           </tr>
           <tr>
             <td>4구 점수</td>
