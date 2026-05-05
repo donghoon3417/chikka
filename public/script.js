@@ -1,147 +1,133 @@
 import {
-  collection, getDocs, doc, deleteDoc
+  collection,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { addDoc, collection, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const db = window.db;
 
-// 🔹 랭킹 불러오기
-export async function loadRanking(type) {
-
-  const snapshot = await getDocs(collection(db, "users"));
-
-  let data = [];
-
-  snapshot.forEach(d => {
-    const u = d.data();
-
-    data.push({
-      name: u.displayName || u.username, // 🔥 닉네임 우선
-      score: type == 4 ? u.score4 : u.score3,
-      highrun: type == 4 ? u.highrun4 : u.highrun3,
-      place: u.place || "",
-    });
-  });
-
-  // 정렬
-  data.sort((a, b) => b.score - a.score);
-
-  data = data.map((u, i) => {
-
-    const tierInfo = getTier(u.score); // 🔥 이거 추가
-
-    return {
-      ...u,
-      rank: i + 1,
-      tier: tierInfo.name,
-      tierImg: tierInfo.img
-    };
-  });
-  renderTable(data);
+// 🔥 티어 계산 (기존 유지 or 커스텀 가능)
+function getTier(score) {
+  if (score >= 2000) return { name: "S", img: "image/tier1.png" };
+  if (score >= 1500) return { name: "A", img: "image/tier2.png" };
+  if (score >= 1000) return { name: "B", img: "image/tier3.png" };
+  if (score >= 500) return { name: "C", img: "image/tier4.png" };
+  return { name: "D", img: "image/tier5.png" };
 }
 
-// 🔹 테이블 출력
-function renderTable(data) {
+// 🔥 랭킹 불러오기 (핵심)
+window.loadRanking = async function (type) {
+
+  const snapshot = await getDocs(collection(db, "matches"));
+
+  let scores = {};
+
+  const now = new Date();
+  let startDate;
+
+  if (type === "weekly") {
+    startDate = new Date();
+    startDate.setDate(now.getDate() - 7);
+  } else if (type === "monthly") {
+    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  } else {
+    startDate = new Date(now.getFullYear(), 0, 1);
+  }
+
+  snapshot.forEach(doc => {
+    const m = doc.data();
+
+    if (!m.createdAt) return;
+
+    const matchDate = m.createdAt.toDate();
+    if (matchDate < startDate) return;
+
+    const WIN = 100;
+    const LOSE = 10;
+
+    if (!scores[m.playerA]) scores[m.playerA] = { score: 0, name: m.playerA };
+    if (!scores[m.playerB]) scores[m.playerB] = { score: 0, name: m.playerB };
+
+    if (m.winner === m.playerA) {
+      scores[m.playerA].score += WIN;
+      scores[m.playerB].score += LOSE;
+    } else {
+      scores[m.playerB].score += WIN;
+      scores[m.playerA].score += LOSE;
+    }
+  });
+
+  let data = Object.values(scores);
+
+  data.sort((a, b) => b.score - a.score);
+
+  // 🔥 users 정보 가져오기 (닉네임/당구장)
+  const userSnap = await getDocs(collection(db, "users"));
+  const userMap = {};
+
+  userSnap.forEach(doc => {
+    const u = doc.data();
+    userMap[u.username] = u;
+  });
 
   const tbody = document.querySelector("#rankingTable tbody");
   tbody.innerHTML = "";
 
-  data.forEach(u => {
-    const tr = document.createElement("tr");
+  data.forEach((u, i) => {
+    const user = userMap[u.name] || {};
 
-    tr.innerHTML = `
-      <td>${u.rank}</td>
-      <td>${u.name}</td>
-       <td>
-    <img src="image/${u.tierImg}" width="30">
-    ${u.tier}
-  </td>
-      <td>${u.score || 0}</td>
-      <td>${u.highrun || 0}</td>
-      <td>${u.place || ""}</td>
+    const tier = getTier(u.score);
+
+    const row = `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${user.displayName || u.name}</td>
+        <td>
+          <img src="${tier.img}" width="30" />
+          ${tier.name}
+        </td>
+        <td>${u.score}</td>
+        <td>${user.highrun4 || "-"}</td>
+        <td>${user.place || "-"}</td>
+      </tr>
     `;
 
-    tbody.appendChild(tr);
+    tbody.innerHTML += row;
   });
-}
-
-// 🔹 회원 목록 (관리자)
-export async function loadUsers() {
-
-  const snapshot = await getDocs(collection(db, "users"));
-
-  const tbody = document.querySelector("#userTable tbody");
-  tbody.innerHTML = "";
-
-  let i = 1;
-
-  snapshot.forEach(d => {
-    const u = d.data();
-
-    const tr = document.createElement("tr");
-
-    tr.innerHTML = `
-      <td>${i++}</td>
-      <td>${u.username || u.id}</td>
-      <td>${u.displayName || ""}</td>
-      <td>${u.score4}</td>
-      <td>${u.score3}</td>
-      <td>${u.highrun4}</td>
-      <td>${u.highrun3}</td>
-      <td><button onclick="removeUser('${d.id}')">삭제</button></td>
-    `;
-
-    tbody.appendChild(tr);
-  });
-}
-
-function getTier(score) {
-
-  const tiers = [
-    { min: 30, name: "입문", img: "tier1.png" },
-    { min: 50, name: "초보", img: "tier2.png" },
-    { min: 80, name: "하수", img: "tier3.png" },
-    { min: 100, name: "중하", img: "tier4.png" },
-    { min: 120, name: "중수", img: "tier5.png" },
-    { min: 150, name: "중상", img: "tier6.png" },
-    { min: 200, name: "고수", img: "tier7.png" },
-    { min: 250, name: "상급자", img: "tier8.png" },
-    { min: 300, name: "준프로", img: "tier9.png" },
-    { min: 400, name: "프로", img: "tier10.png" },
-    { min: 500, name: "달인", img: "tier11.png" },
-    { min: 700, name: "마스터", img: "tier12.png" },
-    { min: 1000, name: "그랜드마스터", img: "tier13.png" },
-    { min: 1500, name: "레전드", img: "tier14.png" },
-    { min: 2000, name: "신", img: "tier15.png" }
-  ];
-
-  let result = tiers[0];
-
-  tiers.forEach(t => {
-    if (score >= t.min) {
-      result = t;
-    }
-  });
-
-  return result;
-}
-
-// 🔹 삭제
-export async function removeUser(uid) {
-
-  if (!confirm("정말 삭제할까요?")) return;
-
-  await deleteDoc(doc(db, "users", uid));
-
-  alert("삭제 완료");
-
-  loadUsers();
-  loadRanking(4);
-}
-
-// 🔹 초기 실행 (랭킹만)
-window.onload = () => {
-  loadRanking(4);
 };
 
-// 👉 HTML 연결
-window.loadRanking = loadRanking;
-window.loadUsers = loadUsers;
-window.removeUser = removeUser;
+window.addMatch = async function () {
+  const playerA = document.getElementById("pA").value;
+  const playerB = document.getElementById("pB").value;
+  const winner = document.getElementById("win").value;
+
+  if (!playerA || !playerB || !winner) {
+    alert("값을 모두 입력하세요");
+    return;
+  }
+
+  if (winner !== playerA && winner !== playerB) {
+    alert("승자는 플레이어 A 또는 B와 같아야 합니다");
+    return;
+  }
+
+  await addDoc(collection(window.db, "matches"), {
+    playerA,
+    playerB,
+    winner,
+    createdAt: serverTimestamp()
+  });
+
+  alert("경기 등록 완료");
+
+  // 입력칸 초기화
+  document.getElementById("pA").value = "";
+  document.getElementById("pB").value = "";
+  document.getElementById("win").value = "";
+
+  // 랭킹 다시 로드
+  loadRanking("weekly");
+};
+
+// 🔥 최초 로딩
+window.loadRanking("weekly");

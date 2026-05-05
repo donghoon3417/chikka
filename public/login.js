@@ -14,7 +14,7 @@ import {
 let currentUser = null;
 let currentUserData = null;
 
-// 🔹 공통: username → email 변환
+// 🔹 username → email 변환
 function toEmail(username) {
     return username.trim().toLowerCase() + "@chikka.com";
 }
@@ -22,9 +22,9 @@ function toEmail(username) {
 // 🔹 회원가입
 async function signup() {
     try {
-        const username = document.getElementById("s_id").value.trim().toLowerCase();
-        const displayName = document.getElementById("s_name").value.trim();
-        const password = document.getElementById("s_pw").value;
+        const username = s_id.value.trim().toLowerCase();
+        const displayName = s_name.value.trim();
+        const password = s_pw.value;
 
         if (!username || !displayName || !password) {
             alert("모든 값을 입력하세요");
@@ -57,8 +57,8 @@ async function signup() {
 // 🔹 로그인
 async function login() {
 
-    const username = document.getElementById("id").value.trim().toLowerCase();
-    const password = document.getElementById("pw").value;
+    const username = id.value.trim().toLowerCase();
+    const password = pw.value;
 
     if (!username || !password) {
         alert("아이디/비밀번호 입력");
@@ -72,10 +72,9 @@ async function login() {
 
         currentUser = userCred.user;
 
-        const docSnap = await getDoc(doc(db, "users", currentUser.uid));
+        const docSnap = await getDoc(doc(db, currentUser.uid));
         currentUserData = docSnap.data();
 
-        // 🔥 로그인 유지용 저장
         localStorage.setItem("user", JSON.stringify({
             uid: currentUser.uid
         }));
@@ -84,7 +83,7 @@ async function login() {
 
         setLoginUI(true);
 
-        if (window.loadRanking) loadRanking(4);
+        if (window.loadRanking) loadRanking("weekly");
 
     } catch (err) {
         console.error(err);
@@ -100,7 +99,6 @@ async function logout() {
     currentUser = null;
     currentUserData = null;
 
-    // 🔥 로컬 제거
     localStorage.removeItem("user");
 
     alert("로그아웃");
@@ -108,7 +106,7 @@ async function logout() {
     setLoginUI(false);
 }
 
-// 🔹 로그인 상태 자동 유지 (핵심)
+// 🔹 로그인 상태 유지
 onAuthStateChanged(auth, async (user) => {
 
     if (user) {
@@ -116,21 +114,15 @@ onAuthStateChanged(auth, async (user) => {
 
         const docSnap = await getDoc(doc(db, "users", user.uid));
 
-        if (docSnap.exists()) {
-            currentUserData = docSnap.data();
-        } else {
-            console.warn("유저 데이터 없음");
-            currentUserData = null;
-        }
+        currentUserData = docSnap.exists() ? docSnap.data() : null;
 
-        // 🔥 로컬 동기화
         localStorage.setItem("user", JSON.stringify({
             uid: user.uid
         }));
 
         setLoginUI(true);
 
-        if (window.loadRanking) loadRanking(4);
+        if (window.loadRanking) loadRanking("weekly");
 
     } else {
         currentUser = null;
@@ -151,6 +143,8 @@ function setLoginUI(isLogin) {
     const mypageBtn = document.getElementById("mypageBtn");
     const userSection = document.getElementById("userSection");
 
+    const deleteBtn = document.querySelector("button[onclick='deleteMyAccount()']");
+
     if (isLogin) {
 
         loginPage.querySelectorAll("input").forEach(el => el.style.display = "none");
@@ -158,7 +152,10 @@ function setLoginUI(isLogin) {
 
         mypageBtn.style.display = "inline-block";
 
-        // 🔥 관리자 체크 강화
+        // 🔥 회원탈퇴 버튼 표시
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+
+        // 관리자
         if (currentUserData && currentUserData.role === "admin") {
             userSection.style.display = "block";
             if (window.loadUsers) loadUsers();
@@ -176,6 +173,9 @@ function setLoginUI(isLogin) {
         mypageBtn.style.display = "none";
         userSection.style.display = "none";
 
+        // 🔥 회원탈퇴 숨김
+        if (deleteBtn) deleteBtn.style.display = "none";
+
         authBtn.innerText = "로그인";
         authBtn.onclick = login;
     }
@@ -183,21 +183,20 @@ function setLoginUI(isLogin) {
 
 // 🔹 화면 전환
 function showSignup() {
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("signupPage").style.display = "block";
+    loginPage.style.display = "none";
+    signupPage.style.display = "block";
 }
 
 function showLogin() {
-    document.getElementById("loginPage").style.display = "block";
-    document.getElementById("signupPage").style.display = "none";
+    loginPage.style.display = "block";
+    signupPage.style.display = "none";
 }
 
-// 🔹 외부 접근 허용
+// 🔹 외부 연결
 window.signup = signup;
 window.login = login;
 window.logout = logout;
 window.showSignup = showSignup;
 window.showLogin = showLogin;
 
-// 🔹 다른 파일에서 사용 가능
 export { currentUser, currentUserData };
