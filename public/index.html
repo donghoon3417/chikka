@@ -1,184 +1,87 @@
 <!doctype html>
-<html>
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>당구 랭킹</title>
 
-    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- 🔥 Firebase 연결 -->
+    <title>CHIKKA</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- FIREBASE -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
       import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
       import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
       const firebaseConfig = {
-        apiKey: "AIzaSyCdxlHN90ZEioV0E6hQBtJMeNknBL4Ektk",
-        authDomain: "chikka-web.firebaseapp.com",
-        projectId: "chikka-web",
-        storageBucket: "chikka-web.firebasestorage.app",
-        messagingSenderId: "38954205585",
-        appId: "1:38954205585:web:a79a40a86845bdc8431a30",
+        apiKey: "YOUR_API_KEY",
+
+        authDomain: "YOUR_AUTH_DOMAIN",
+
+        projectId: "YOUR_PROJECT_ID",
+
+        storageBucket: "YOUR_STORAGE_BUCKET",
+
+        messagingSenderId: "YOUR_MESSAGING_ID",
+
+        appId: "YOUR_APP_ID",
       };
 
       const app = initializeApp(firebaseConfig);
 
       window.db = getFirestore(app);
+
       window.auth = getAuth(app);
     </script>
   </head>
 
   <body>
-    <h2>CHIKKA</h2>
+    <!-- HEADER -->
+    <header class="topbar">
+      <div class="logo">CHIKKA</div>
 
-    <!-- 🔹 로그인 -->
-    <div id="loginPage">
-      <input id="id" placeholder="아이디" />
-      <input id="pw" type="password" placeholder="비밀번호" />
+      <nav>
+        <a href="#rankingSection"> 랭킹 </a>
 
-      <button id="mypageBtn" onclick="showMyPage()" style="display: none">
-        마이페이지
-      </button>
-      <button id="authBtn" onclick="login()">로그인</button>
-      <button onclick="showSignup()">회원가입</button>
-      <button onclick="deleteMyAccount()" style="background: red; color: white">
-        회원탈퇴
-      </button>
-    </div>
+        <a href="#hallSection"> 당구장 </a>
 
-    <!-- 🔹 회원가입 -->
-    <div id="signupPage" style="display: none">
-      <h3>회원가입</h3>
+        <a href="#tournamentSection"> 토너먼트 </a>
 
-      <input id="s_id" placeholder="아이디" />
-      <input id="s_name" placeholder="닉네임" />
-      <!-- 🔥 추가 -->
-      <input id="s_pw" type="password" placeholder="비밀번호" />
+        <a href="#mypageSection"> 마이페이지 </a>
+      </nav>
+    </header>
 
-      <input id="s_score4" placeholder="4구 점수" />
-      <input id="s_score3" placeholder="3구 점수" />
-      <input id="s_hr4" placeholder="4구 하이런" />
-      <input id="s_hr3" placeholder="3구 하이런" />
-      <input id="s_place" placeholder="당구장" />
+    <!-- MAIN -->
+    <main class="container">
+      <div id="login-container"></div>
 
-      <button onclick="signup()">가입하기</button>
-      <button onclick="showLogin()">뒤로가기</button>
-    </div>
+      <div id="ranking-container"></div>
 
-    <hr />
+      <div id="hall-container"></div>
 
-    <!-- 🔹 마이페이지 -->
-    <div id="mypage" style="display: none; margin-top: 20px">
-      <h3>마이페이지</h3>
+      <div id="tournament-container"></div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>항목</th>
-            <th>값</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>아이디</td>
-            <td><input id="m_id" disabled /></td>
-          </tr>
-          <tr>
-            <td>닉네임</td>
-            <td><input id="m_displayName" /></td>
-          </tr>
-          <tr>
-            <td>4구 점수</td>
-            <td><input id="m_score4" /></td>
-          </tr>
-          <tr>
-            <td>3구 점수</td>
-            <td><input id="m_score3" /></td>
-          </tr>
-          <tr>
-            <td>4구 하이런</td>
-            <td><input id="m_hr4" /></td>
-          </tr>
-          <tr>
-            <td>3구 하이런</td>
-            <td><input id="m_hr3" /></td>
-          </tr>
-          <tr>
-            <td>당구장</td>
-            <td><input id="m_place" /></td>
-          </tr>
-        </tbody>
-      </table>
+      <div id="mypage-container"></div>
 
-      <br />
+      <div id="admin-container"></div>
+    </main>
 
-      <button onclick="updateMyInfo()">수정 저장</button>
-      <button onclick="closeMyPage()">닫기</button>
-    </div>
+    <!-- INCLUDE -->
+    <script type="module" src="js/include.js"></script>
 
-    <hr />
+    <script type="module" src="js/login.js"></script>
 
-    <hr />
+    <script type="module" src="js/script.js"></script>
 
-    <h3>경기 등록</h3>
+    <script type="module" src="js/hall.js"></script>
 
-    <input id="pA" placeholder="플레이어 A" />
-    <input id="pB" placeholder="플레이어 B" />
-    <input id="win" placeholder="승자" />
+    <script type="module" src="js/tournament.js"></script>
 
-    <button onclick="addMatch()">경기 등록</button>
-
-    <hr />
-
-    <!-- 🔹 랭킹 -->
-    <h3>랭킹</h3>
-    <button onclick="loadRanking('weekly')">주간</button>
-    <button onclick="loadRanking('monthly')">월간</button>
-    <button onclick="loadRanking('yearly')">연간</button>
-
-    <table id="rankingTable">
-      <thead>
-        <tr>
-          <th>순위</th>
-          <th>닉네임</th>
-          <!-- 🔥 변경 -->
-          <th>등급</th>
-          <th>점수</th>
-          <th>하이런</th>
-          <th>당구장</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <hr />
-
-    <!-- 🔹 관리자 -->
-    <div id="userSection" style="display: none">
-      <h3>회원 목록</h3>
-      <button onclick="loadUsers()">회원 불러오기</button>
-
-      <table id="userTable">
-        <thead>
-          <tr>
-            <th>순번</th>
-            <th>아이디</th>
-            <th>닉네임</th>
-            <!-- 🔥 추가 -->
-            <th>4구</th>
-            <th>3구</th>
-            <th>4구HR</th>
-            <th>3구HR</th>
-            <th>삭제</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- 🔥 JS 연결 (순서 중요) -->
-    <script type="module" src="login.js"></script>
-    <script type="module" src="script.js"></script>
-    <script type="module" src="mypage.js"></script>
+    <script type="module" src="js/mypage.js"></script>
   </body>
 </html>
