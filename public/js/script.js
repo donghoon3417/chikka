@@ -1,15 +1,33 @@
 import {
   collection,
-  getDocs,
-  addDoc,
-  serverTimestamp
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const db = window.db;
+/* =====================================
+   FIREBASE WAIT
+===================================== */
 
-/* =========================================
+function getDB() {
+
+  if (!window.db) {
+
+    throw new Error(
+      "Firebase DB not initialized"
+    );
+  }
+
+  return window.db;
+}
+/* =====================================
+   STATE
+===================================== */
+
+let currentGame = "4ball";
+let currentPeriod = "weekly";
+
+/* =====================================
    TIER
-========================================= */
+===================================== */
 
 function getTier(score) {
 
@@ -47,299 +65,286 @@ function getTier(score) {
   };
 }
 
-/* =========================================
+/* =====================================
+   PERIOD CHANGE
+===================================== */
+
+window.changePeriod = function (period) {
+
+  currentPeriod = period;
+
+  document
+    .querySelectorAll(
+      ".ranking-period-buttons button"
+    )
+    .forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+  if (period === "weekly") {
+    weeklyBtn.classList.add("active");
+  }
+
+  if (period === "monthly") {
+    monthlyBtn.classList.add("active");
+  }
+
+  if (period === "yearly") {
+    yearlyBtn.classList.add("active");
+  }
+
+  loadRanking(
+    currentGame,
+    currentPeriod
+  );
+};
+
+/* =====================================
    LOAD RANKING
-========================================= */
+===================================== */
 
-window.loadRanking = async function (type = "weekly") {
+window.loadRanking =
+  async function (
+    game = "4ball",
+    period = "weekly"
+  ) {
 
-  try {
+    currentGame = game;
+    currentPeriod = period;
+    console.log("랭킹 로드 시작");
 
-    /* =========================
-       경기 데이터 가져오기
-    ========================= */
+    const rank4Btn =
+  document.getElementById("rank4Btn");
 
-    const matchSnap =
-      await getDocs(
-        collection(db, "matches")
-      );
+const rank3Btn =
+  document.getElementById("rank3Btn");
 
-    let scores = {};
+const weeklyBtn =
+  document.getElementById("weeklyBtn");
 
-    const now = new Date();
+const monthlyBtn =
+  document.getElementById("monthlyBtn");
 
-    let startDate;
+const yearlyBtn =
+  document.getElementById("yearlyBtn");
 
-    // 🔥 기간 계산
-    if (type === "weekly") {
+const highrunHeader =
+  document.getElementById("highrunHeader");
+    try {
 
-      startDate = new Date();
+      /* =========================
+         게임 버튼 상태
+      ========================= */
 
-      startDate.setDate(
-        now.getDate() - 7
-      );
+      document
+        .querySelectorAll(
+          ".ranking-type-buttons button"
+        )
+        .forEach(btn => {
+          btn.classList.remove("active");
+        });
 
-    } else if (type === "monthly") {
+      if (game === "4ball") {
 
-      startDate =
-        new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          1
-        );
+        rank4Btn.classList.add("active");
 
-    } else {
-
-      startDate =
-        new Date(
-          now.getFullYear(),
-          0,
-          1
-        );
-    }
-
-    /* =========================
-       점수 계산
-    ========================= */
-
-    matchSnap.forEach(docSnap => {
-
-      const match = docSnap.data();
-
-      if (!match.createdAt) return;
-
-      const matchDate =
-        match.createdAt.toDate();
-
-      // 🔥 기간 제외
-      if (matchDate < startDate) return;
-
-      const WIN_SCORE = 100;
-      const LOSE_SCORE = 10;
-
-      // 플레이어 초기화
-      if (!scores[match.playerA]) {
-
-        scores[match.playerA] = {
-          score: 0,
-          name: match.playerA
-        };
-      }
-
-      if (!scores[match.playerB]) {
-
-        scores[match.playerB] = {
-          score: 0,
-          name: match.playerB
-        };
-      }
-
-      // 승패 계산
-      if (match.winner === match.playerA) {
-
-        scores[match.playerA].score += WIN_SCORE;
-        scores[match.playerB].score += LOSE_SCORE;
+        highrunHeader.innerText =
+          "4구하이런";
 
       } else {
 
-        scores[match.playerB].score += WIN_SCORE;
-        scores[match.playerA].score += LOSE_SCORE;
+        rank3Btn.classList.add("active");
+
+        highrunHeader.innerText =
+          "3구하이런";
       }
-    });
 
-    /* =========================
-       정렬
-    ========================= */
+      /* =========================
+         기간 버튼 상태
+      ========================= */
 
-    let rankingData =
-      Object.values(scores);
-
-    rankingData.sort((a, b) => {
-      return b.score - a.score;
-    });
-
-    /* =========================
-       유저 정보 가져오기
-    ========================= */
-
-    const userSnap =
-      await getDocs(
-        collection(db, "users")
-      );
-
-    const userMap = {};
-
-    userSnap.forEach(docSnap => {
-
-      const user = docSnap.data();
-
-      userMap[user.username] = user;
-    });
-
-    /* =========================
-       테이블 출력
-    ========================= */
-
-    const tbody =
-      document.querySelector(
-        "#rankingTable tbody"
-      );
-
-    tbody.innerHTML = "";
-
-    rankingData.forEach((rankUser, index) => {
-
-      const user =
-        userMap[rankUser.name] || {};
-
-      const tier =
-        getTier(rankUser.score);
-
-      const row = `
-        <tr>
-          <td>${index + 1}</td>
-
-          <td>
-            ${user.displayName || rankUser.name}
-          </td>
-
-          <td>
-            <img
-              src="${tier.img}"
-              width="30"
-              style="
-                vertical-align: middle;
-                margin-right: 6px;
-              "
-            />
-            ${tier.name}
-          </td>
-
-          <td>${rankUser.score}</td>
-
-          <td>
-            ${user.highrun4 || "-"}
-          </td>
-
-          <td>
-            ${user.place || "-"}
-          </td>
-        </tr>
-      `;
-
-      tbody.innerHTML += row;
-    });
-
-  } catch (err) {
-
-    console.error(
-      "랭킹 로드 실패:",
-      err
-    );
-  }
-};
-
-/* =========================================
-   MATCH REGISTER
-========================================= */
-
-window.addMatch = async function () {
-
-  try {
-
-    const playerA =
       document
-        .getElementById("pA")
-        .value
-        .trim()
-        .toLowerCase();
+        .querySelectorAll(
+          ".ranking-period-buttons button"
+        )
+        .forEach(btn => {
+          btn.classList.remove("active");
+        });
 
-    const playerB =
-      document
-        .getElementById("pB")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const winner =
-      document
-        .getElementById("win")
-        .value
-        .trim()
-        .toLowerCase();
-
-    /* =========================
-       입력 검사
-    ========================= */
-
-    if (
-      !playerA ||
-      !playerB ||
-      !winner
-    ) {
-
-      alert("값을 모두 입력하세요");
-
-      return;
-    }
-
-    if (
-      winner !== playerA &&
-      winner !== playerB
-    ) {
-
-      alert(
-        "승자는 플레이어 A 또는 B와 같아야 합니다"
-      );
-
-      return;
-    }
-
-    /* =========================
-       경기 저장
-    ========================= */
-
-    await addDoc(
-      collection(db, "matches"),
-      {
-        playerA,
-        playerB,
-        winner,
-        createdAt: serverTimestamp()
+      if (period === "weekly") {
+        weeklyBtn.classList.add("active");
       }
-    );
 
-    alert("경기 등록 완료");
+      if (period === "monthly") {
+        monthlyBtn.classList.add("active");
+      }
 
-    /* =========================
-       입력 초기화
-    ========================= */
+      if (period === "yearly") {
+        yearlyBtn.classList.add("active");
+      }
 
-    document.getElementById("pA").value = "";
+      /* =========================
+         유저 데이터 가져오기
+      ========================= */
 
-    document.getElementById("pB").value = "";
+      const snapshot =
+        await getDocs(
+          collection(
+            getDB(),
+            "users"
+          )
+        );
+      let users = [];
 
-    document.getElementById("win").value = "";
+      snapshot.forEach(docSnap => {
 
-    /* =========================
-       랭킹 갱신
-    ========================= */
+        const user =
+          docSnap.data();
 
-    loadRanking("weekly");
+        users.push(user);
+      });
 
-  } catch (err) {
+      /* =========================
+         정렬
+      ========================= */
 
-    console.error(
-      "경기 등록 실패:",
-      err
-    );
+      users.sort((a, b) => {
 
-    alert("경기 등록 실패");
-  }
-};
+        // 4구
+        if (game === "4ball") {
 
-/* =========================================
+          return (
+            (b.score4 || 0) -
+            (a.score4 || 0)
+          );
+        }
+
+        // 3구
+        return (
+          (b.score3 || 0) -
+          (a.score3 || 0)
+        );
+      });
+
+      /* =========================
+         테이블 출력
+      ========================= */
+
+      const tbody =
+        document.querySelector(
+          "#rankingTable tbody"
+        );
+
+      tbody.innerHTML = "";
+
+      users.forEach((user, index) => {
+
+        const score =
+          game === "4ball"
+            ? user.score4 || 0
+            : user.score3 || 0;
+
+        const highrun =
+          game === "4ball"
+            ? user.highrun4 || "-"
+            : user.highrun3 || "-";
+
+        const tier =
+          getTier(score);
+
+        const row = `
+          <tr>
+
+            <td>
+              ${index + 1}
+            </td>
+
+            <td>
+              ${user.displayName || "-"}
+            </td>
+
+            <td>
+              <img
+                src="${tier.img}"
+                width="28"
+                style="
+                  vertical-align: middle;
+                  margin-right: 6px;
+                "
+              />
+              ${tier.name}
+            </td>
+
+            <td>
+              ${score}
+            </td>
+
+            <td>
+              ${highrun}
+            </td>
+
+            <td>
+              ${user.place || "-"}
+            </td>
+
+          </tr>
+        `;
+
+        tbody.innerHTML += row;
+      });
+
+    } catch (err) {
+
+      console.error(
+        "랭킹 로드 실패:",
+        err
+      );
+    }
+  };
+
+
+async function waitForRankingTable() {
+
+  return new Promise(resolve => {
+
+    const timer =
+      setInterval(() => {
+
+        const table =
+          document.querySelector(
+            "#rankingTable tbody"
+          );
+
+        // table 존재
+        if (
+          table &&
+          window.db
+        ) {
+
+          clearInterval(timer);
+
+          resolve();
+        }
+
+      }, 100);
+  });
+}
+
+/* =====================================
    FIRST LOAD
-========================================= */
+===================================== */
 
-window.loadRanking("weekly");
+(async () => {
+
+  await waitForRankingTable();
+
+  console.log(
+    "랭킹 테이블 준비 완료"
+  );
+
+  loadRanking(
+    "4ball",
+    "weekly"
+  );
+
+})();

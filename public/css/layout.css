@@ -1,58 +1,9 @@
-.topbar {
-
-  position: sticky;
-
-  top: 0;
-
-  z-index: 100;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  padding: 20px 40px;
-
-  background: rgba(15, 23, 42, 0.9);
-
-  backdrop-filter: blur(12px);
-
-  border-bottom:
-    1px solid rgba(255,255,255,0.08);
-}
-
-.logo {
-
-  font-size: 28px;
-
-  font-weight: 800;
-
-  letter-spacing: 2px;
-}
-
-nav {
-
-  display: flex;
-
-  gap: 28px;
-}
-
-nav a {
-
-  opacity: 0.8;
-
-  font-size: 15px;
-}
-
-nav a:hover {
-  opacity: 1;
-}
+/* =========================
+   MAIN
+========================= */
 
 .container {
-
   width: 100%;
-
   max-width: 1300px;
 
   margin: 0 auto;
@@ -64,19 +15,23 @@ section {
   margin-bottom: 40px;
 }
 
+/* =========================
+   TITLE
+========================= */
+
 .section-title-row {
-
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
 
   margin-bottom: 18px;
 }
 
-.grid-form {
+/* =========================
+   FORM
+========================= */
 
+.grid-form {
   display: grid;
 
   grid-template-columns:
@@ -89,32 +44,28 @@ section {
 }
 
 .auth-row {
-
   display: flex;
-
   gap: 12px;
-
   flex-wrap: wrap;
 }
 
 .button-row {
-
   display: flex;
-
   gap: 12px;
 
   margin-top: 18px;
-
   flex-wrap: wrap;
 }
 
-.ranking-wrapper {
+/* =========================
+   CONTENT
+========================= */
 
+.ranking-wrapper {
   overflow-x: auto;
 }
 
 .tournament-grid {
-
   display: grid;
 
   grid-template-columns:

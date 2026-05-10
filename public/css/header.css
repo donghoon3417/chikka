@@ -1,0 +1,262 @@
+.topbar-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  width: 100%;
+
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.topbar {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1360px;
+
+  margin: 0 auto;
+
+  padding: 12px 28px;
+
+  gap: 22px;
+}
+
+/* 헤더 아래 선 */
+.topbar::after {
+  content: "";
+
+  position: absolute;
+
+  left: 28px;
+  right: 28px;
+  bottom: 0;
+
+  height: 1px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 2px;
+
+  flex-shrink: 0;
+}
+
+/* =========================
+   NAV
+========================= */
+
+nav {
+  display: flex;
+  align-items: center;
+
+  gap: 24px;
+
+  margin-left: 12px;
+}
+
+nav a {
+  opacity: 0.9;
+
+  font-size: 17px;
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  transition: opacity 0.2s;
+}
+
+nav a:hover {
+  opacity: 1;
+}
+
+/* =========================
+   HEADER LOGIN
+========================= */
+
+#login-container {
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 !important;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* login wrapper 제거 */
+#login-container > * {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  width: auto !important;
+  min-width: auto !important;
+  max-width: none !important;
+}
+
+/* 로그인 한 줄 */
+#loginPage {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  height: 40px;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  line-height: 1;
+}
+
+/* 회원가입 숨김 */
+#signupPage {
+  display: none !important;
+}
+
+/* 버튼 row 보정 */
+#loginPage .button-row {
+  margin-top: 0 !important;
+  align-items: center;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+#loginPage input {
+  width: 92px;
+  height: 38px;
+
+  padding: 0 12px;
+  margin: 0;
+
+  border:
+    1px solid rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+
+  border-radius: 10px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.05
+    );
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  outline: none;
+  box-sizing: border-box;
+}
+
+#loginPage input:focus {
+  border-color:
+    rgba(
+      59,
+      130,
+      246,
+      0.7
+    );
+}
+
+#loginPage input::placeholder {
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.55
+    );
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+#loginPage button,
+#authBtn {
+  height: 38px;
+  min-height: 38px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 14px;
+  margin: 0;
+
+  border: none;
+  border-radius: 10px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.06
+    );
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  line-height: 1;
+  vertical-align: middle;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    background 0.2s,
+    transform 0.15s;
+}
+
+#loginPage button:hover,
+#authBtn:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.1
+    );
+}

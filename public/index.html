@@ -12,54 +12,45 @@
 
     <!-- FIREBASE -->
     <script type="module">
+      import { firebaseConfig } from "./firebase-config.js";
+
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
       import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
       import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-      const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-
-        authDomain: "YOUR_AUTH_DOMAIN",
-
-        projectId: "YOUR_PROJECT_ID",
-
-        storageBucket: "YOUR_STORAGE_BUCKET",
-
-        messagingSenderId: "YOUR_MESSAGING_ID",
-
-        appId: "YOUR_APP_ID",
-      };
-
       const app = initializeApp(firebaseConfig);
 
       window.db = getFirestore(app);
 
       window.auth = getAuth(app);
+
+      console.log("firebase init 완료");
     </script>
   </head>
 
   <body>
     <!-- HEADER -->
-    <header class="topbar">
-      <div class="logo">CHIKKA</div>
+    <div class="topbar-wrap">
+      <header class="topbar">
+        <div class="logo">CHIKKA</div>
 
-      <nav>
-        <a href="#rankingSection"> 랭킹 </a>
+        <nav>
+          <a href="#rankingSection"> 랭킹 </a>
 
-        <a href="#hallSection"> 당구장 </a>
+          <a href="#hallSection"> 당구장 </a>
 
-        <a href="#tournamentSection"> 토너먼트 </a>
+          <a href="#tournamentSection"> 토너먼트 </a>
 
-        <a href="#mypageSection"> 마이페이지 </a>
-      </nav>
-    </header>
+        </nav>
+
+        <div id="login-container"></div>
+      </header>
+    </div>
 
     <!-- MAIN -->
     <main class="container">
-      <div id="login-container"></div>
-
       <div id="ranking-container"></div>
 
       <div id="hall-container"></div>
@@ -73,15 +64,5 @@
 
     <!-- INCLUDE -->
     <script type="module" src="js/include.js"></script>
-
-    <script type="module" src="js/login.js"></script>
-
-    <script type="module" src="js/script.js"></script>
-
-    <script type="module" src="js/hall.js"></script>
-
-    <script type="module" src="js/tournament.js"></script>
-
-    <script type="module" src="js/mypage.js"></script>
   </body>
 </html>

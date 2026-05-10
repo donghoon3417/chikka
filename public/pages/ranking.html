@@ -1,37 +1,37 @@
 <section id="rankingSection">
+  <div class="ranking-top-row">
+    <!-- 왼쪽 -->
+    <div class="ranking-type-buttons">
+      <button
+        id="rank4Btn"
+        class="active"
+        onclick="loadRanking('4ball', 'weekly')"
+      >
+        4구
+      </button>
 
-  <div class="section-title-row">
+      <button id="rank3Btn" onclick="loadRanking('3ball', 'weekly')">
+        3구
+      </button>
+    </div>
 
-    <h2>
-      랭킹
-    </h2>
-
-    <div class="ranking-buttons">
-
-      <button onclick="loadRanking('weekly')">
+    <!-- 오른쪽 -->
+    <div class="ranking-period-buttons">
+      <button id="weeklyBtn" class="active" onclick="changePeriod('weekly')">
         주간
       </button>
 
-      <button onclick="loadRanking('monthly')">
-        월간
-      </button>
+      <button id="monthlyBtn" onclick="changePeriod('monthly')">월간</button>
 
-      <button onclick="loadRanking('yearly')">
-        연간
-      </button>
-
+      <button id="yearlyBtn" onclick="changePeriod('yearly')">연간</button>
     </div>
-
   </div>
 
+  <!-- TABLE -->
   <div class="ranking-wrapper">
-
     <table id="rankingTable">
-
       <thead>
-
         <tr>
-
           <th>순위</th>
 
           <th>닉네임</th>
@@ -40,18 +40,13 @@
 
           <th>점수</th>
 
-          <th>하이런</th>
+          <th id="highrunHeader">4구하이런</th>
 
           <th>당구장</th>
-
         </tr>
-
       </thead>
 
       <tbody></tbody>
-
     </table>
-
   </div>
-
 </section>

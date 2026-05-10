@@ -155,3 +155,43 @@ td img {
   background:
     rgba(255,255,255,0.06);
 }
+
+.ranking-type-buttons,
+.ranking-period-buttons {
+
+  display: flex;
+
+  gap: 12px;
+
+  margin-bottom: 16px;
+
+  flex-wrap: wrap;
+}
+
+.ranking-type-buttons button,
+.ranking-period-buttons button {
+
+  background:
+    rgba(255,255,255,0.08);
+}
+
+.ranking-type-buttons button.active,
+.ranking-period-buttons button.active {
+
+  background: #3b82f6;
+}
+
+.ranking-top-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+
+  flex-wrap: wrap;
+}

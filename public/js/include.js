@@ -1,45 +1,62 @@
 async function loadPage(id, file) {
 
-  const html =
-    await fetch(file)
-      .then(res => res.text());
+    const el =
+        document.getElementById(id);
 
-  document
-    .getElementById(id)
-    .innerHTML = html;
+    if (!el) return;
+
+    const html =
+        await fetch(file)
+            .then(res => res.text());
+
+    el.innerHTML = html;
 }
 
-loadPage(
-  "login-container",
-  "pages/login.html"
+/* =========================
+   HTML LOAD
+========================= */
+
+await loadPage(
+    "login-container",
+    "pages/login.html"
 );
 
-loadPage(
-  "ranking-container",
-  "pages/ranking.html"
+await loadPage(
+    "ranking-container",
+    "pages/ranking.html"
 );
 
-loadPage(
-  "match-container",
-  "pages/match.html"
+await loadPage(
+    "hall-container",
+    "pages/hall.html"
 );
 
-loadPage(
-  "hall-container",
-  "pages/hall.html"
+await loadPage(
+    "tournament-container",
+    "pages/tournament.html"
 );
 
-loadPage(
-  "tournament-container",
-  "pages/tournament.html"
+await loadPage(
+    "mypage-container",
+    "pages/mypage.html"
 );
 
-loadPage(
-  "mypage-container",
-  "pages/mypage.html"
+await loadPage(
+    "admin-container",
+    "pages/admin.html"
 );
 
-loadPage(
-  "admin-container",
-  "pages/admin.html"
-);
+/* =========================
+   JS LOAD
+========================= */
+
+
+await import("./login.js"); // UI 함수 먼저
+
+await import("./auth.js"); // login(), signup()
+
+await import("./script.js");
+
+await import("./mypage.js");
+
+console.log("모듈 로드 완료");
