@@ -13,50 +13,63 @@ async function loadPage(id, file) {
 }
 
 /* =========================
+   PATH
+========================= */
+
+const isSubPage =
+    location.pathname.includes(
+        "/pages/"
+    );
+
+const base =
+    isSubPage
+        ? "../"
+        : "";
+
+/* =========================
    HTML LOAD
 ========================= */
 
 await loadPage(
+    "header-container",
+    `${base}pages/header.html`
+);
+
+await loadPage(
     "login-container",
-    "pages/login.html"
+    `${base}pages/login.html`
 );
 
 await loadPage(
     "ranking-container",
-    "pages/ranking.html"
+    `${base}pages/ranking.html`
 );
 
 await loadPage(
     "hall-container",
-    "pages/hall.html"
+    `${base}pages/hall.html`
 );
 
 await loadPage(
     "tournament-container",
-    "pages/tournament.html"
-);
-
-await loadPage(
-    "mypage-container",
-    "pages/mypage.html"
+    `${base}pages/tournament.html`
 );
 
 await loadPage(
     "admin-container",
-    "pages/admin.html"
+    `${base}pages/admin.html`
 );
 
 /* =========================
    JS LOAD
 ========================= */
 
+await import("./login.js");
 
-await import("./login.js"); // UI 함수 먼저
+await import("./auth.js");
 
-await import("./auth.js"); // login(), signup()
+await import("./ranking.js");
 
-await import("./script.js");
-
-await import("./mypage.js");
-
-console.log("모듈 로드 완료");
+console.log(
+    "모듈 로드 완료"
+);

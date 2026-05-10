@@ -1,63 +1,267 @@
-<section
-  id="mypageSection"
-  class="card"
-  style="display:none;"
->
+<!doctype html>
+<html lang="ko">
 
-  <h2>
-    마이페이지
-  </h2>
+<head>
 
-  <div class="grid-form">
+  <meta charset="UTF-8" />
 
-    <input
-      id="m_id"
-      disabled
-      placeholder="아이디"
-    />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
-    <input
-      id="m_displayName"
-      placeholder="닉네임"
-    />
+  <title>마이페이지 | CHIKKA</title>
 
-    <input
-      id="m_score4"
-      placeholder="4구 점수"
-    />
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  />
 
-    <input
-      id="m_score3"
-      placeholder="3구 점수"
-    />
+  <style>
 
-    <input
-      id="m_hr4"
-      placeholder="4구 하이런"
-    />
+    body {
 
-    <input
-      id="m_hr3"
-      placeholder="3구 하이런"
-    />
+      margin: 0;
 
-    <input
-      id="m_place"
-      placeholder="당구장"
-    />
+      min-height: 100vh;
+
+      background:
+        #020817;
+
+      font-family:
+        Pretendard,
+        sans-serif;
+    }
+
+    .page-wrap {
+
+      min-height: 100vh;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding:
+        120px 20px 40px;
+    }
+
+    .mypage-wrap {
+
+      width: 100%;
+      max-width: 460px;
+
+      padding: 40px;
+
+      border-radius: 24px;
+
+      background:
+        #0f172a;
+
+      box-sizing: border-box;
+
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.45);
+    }
+
+    h1 {
+
+      margin-top: 0;
+      margin-bottom: 28px;
+
+      text-align: center;
+
+      color: white;
+    }
+
+    .grid-form {
+
+      display: grid;
+
+      gap: 14px;
+    }
+
+    input {
+
+      width: 100%;
+
+      height: 48px;
+
+      padding: 0 14px;
+
+      border:
+        1px solid rgba(255,255,255,0.08);
+
+      border-radius: 12px;
+
+      background:
+        rgba(255,255,255,0.05);
+
+      color: white;
+
+      font-size: 15px;
+
+      box-sizing: border-box;
+    }
+
+    .button-row {
+
+      display: flex;
+
+      gap: 12px;
+
+      margin-top: 24px;
+    }
+
+    button {
+
+      flex: 1;
+
+      height: 48px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      background:
+        #2563eb;
+
+      color: white;
+
+      font-size: 16px;
+      font-weight: 600;
+
+      cursor: pointer;
+    }
+
+    .back-btn {
+
+      background:
+        rgba(255,255,255,0.08);
+    }
+
+  </style>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { firebaseConfig }
+    from "../firebase-config.js";
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getFirestore
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+      getAuth
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    window.db =
+      getFirestore(app);
+
+    window.auth =
+      getAuth(app);
+
+  </script>
+
+</head>
+
+<body>
+<div id="header-container"></div>
+  <!-- HEADER -->
+  <header id="header"></header>
+
+  <div class="page-wrap">
+
+    <div class="mypage-wrap">
+
+      <h1>
+        마이페이지
+      </h1>
+
+      <div class="grid-form">
+
+        <input
+          id="m_id"
+          disabled
+          placeholder="아이디"
+        />
+
+        <input
+          id="m_displayName"
+          placeholder="닉네임"
+        />
+
+        <input
+          id="m_score4"
+          placeholder="4구 점수"
+        />
+
+        <input
+          id="m_score3"
+          placeholder="3구 점수"
+        />
+
+        <input
+          id="m_hr4"
+          placeholder="4구 하이런"
+        />
+
+        <input
+          id="m_hr3"
+          placeholder="3구 하이런"
+        />
+
+        <input
+          id="m_place"
+          placeholder="당구장"
+        />
+
+      </div>
+
+      <div class="button-row">
+
+        <button onclick="updateMyInfo()">
+          수정 저장
+        </button>
+
+        <button
+          class="back-btn"
+          onclick="location.href='../index.html'"
+        >
+          뒤로가기
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 
-  <div class="button-row">
+  <!-- INCLUDE -->
+  <script
+    type="module"
+    src="../js/include.js"
+  ></script>
 
-    <button onclick="updateMyInfo()">
-      수정 저장
-    </button>
+  <!-- AUTH -->
+  <script
+    type="module"
+    src="../js/auth.js"
+  ></script>
 
-    <button onclick="closeMyPage()">
-      닫기
-    </button>
+  <!-- MYPAGE -->
+  <script
+    type="module"
+    src="../js/mypage.js"
+  ></script>
 
-  </div>
+</body>
 
-</section>
+</html>

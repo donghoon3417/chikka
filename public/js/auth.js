@@ -158,15 +158,8 @@ async function signup() {
             "회원가입 완료"
         );
 
-        if (
-            window.loadRanking
-        ) {
-
-            loadRanking(
-                "4ball",
-                "weekly"
-            );
-        }
+        location.href =
+            "../index.html";
 
     } catch (err) {
 

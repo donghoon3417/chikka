@@ -13,6 +13,9 @@ function setLoginUI(isLogin) {
     const authBtn =
         document.getElementById("authBtn");
 
+    const signupBtn =
+        document.getElementById("signupBtn");
+
     const mypageBtn =
         document.getElementById("mypageBtn");
 
@@ -26,7 +29,6 @@ function setLoginUI(isLogin) {
 
     if (
         !loginPage ||
-        !signupPage ||
         !authBtn ||
         !mypageBtn
     ) {
@@ -41,8 +43,15 @@ function setLoginUI(isLogin) {
                 el.style.display = "none";
             });
 
-        signupPage.style.display =
-            "none";
+        if (signupBtn) {
+            signupBtn.style.display =
+                "none";
+        }
+
+        if (signupPage) {
+            signupPage.style.display =
+                "none";
+        }
 
         mypageBtn.style.display =
             "inline-block";
@@ -66,6 +75,11 @@ function setLoginUI(isLogin) {
                 el.style.display =
                     "inline-block";
             });
+
+        if (signupBtn) {
+            signupBtn.style.display =
+                "inline-block";
+        }
 
         mypageBtn.style.display =
             "none";
@@ -94,46 +108,14 @@ function setLoginUI(isLogin) {
 
 function showSignup() {
 
-    const loginPage =
-        document.getElementById("loginPage");
-
-    const signupPage =
-        document.getElementById("signupPage");
-
-    if (
-        !loginPage ||
-        !signupPage
-    ) {
-        return;
-    }
-
-    loginPage.style.display =
-        "none";
-
-    signupPage.style.display =
-        "block";
+    location.href =
+        "pages/signup.html";
 }
 
 function showLogin() {
 
-    const loginPage =
-        document.getElementById("loginPage");
-
-    const signupPage =
-        document.getElementById("signupPage");
-
-    if (
-        !loginPage ||
-        !signupPage
-    ) {
-        return;
-    }
-
-    loginPage.style.display =
-        "block";
-
-    signupPage.style.display =
-        "none";
+    location.href =
+        "../index.html";
 }
 
 /* =====================================

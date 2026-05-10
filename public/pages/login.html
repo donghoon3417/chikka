@@ -1,42 +1,23 @@
 <section class="card">
-
- 
+  <!-- LOGIN -->
   <div id="loginPage">
-
     <div class="auth-row">
+      <input id="id" placeholder="아이디" />
 
-      <input
-        id="id"
-        placeholder="아이디"
-      />
-
-      <input
-        id="pw"
-        type="password"
-        placeholder="비밀번호"
-      />
-
+      <input id="pw" type="password" placeholder="비밀번호" />
     </div>
 
     <div class="button-row">
+      <button id="authBtn" onclick="login()">로그인</button>
 
-      <button
-        id="authBtn"
-        onclick="login()"
-      >
-        로그인
-      </button>
-
-      <button
-        onclick="showSignup()"
-      >
+      <button id="signupBtn" onclick="location.href = 'pages/signup.html'">
         회원가입
       </button>
 
       <button
         id="mypageBtn"
-        onclick="showMyPage()"
-        style="display:none;"
+        onclick="location.href = 'pages/mypage.html'"
+        style="display: none"
       >
         마이페이지
       </button>
@@ -44,76 +25,12 @@
       <button
         class="danger-btn"
         onclick="deleteMyAccount()"
-        style="display:none;"
+        style="display: none"
       >
         회원탈퇴
       </button>
-
     </div>
-
   </div>
-
-  <!-- SIGNUP -->
-  <div
-    id="signupPage"
-    style="display:none;"
-  >
-
-    <h3>
-      회원가입
-    </h3>
-
-    <div class="grid-form">
-
-      <input id="s_id" placeholder="아이디" />
-
-      <input id="s_name" placeholder="닉네임" />
-
-      <input
-        id="s_pw"
-        type="password"
-        placeholder="비밀번호"
-      />
-
-      <input
-        id="s_score4"
-        placeholder="4구 점수"
-      />
-
-      <input
-        id="s_score3"
-        placeholder="3구 점수"
-      />
-
-      <input
-        id="s_hr4"
-        placeholder="4구 하이런"
-      />
-
-      <input
-        id="s_hr3"
-        placeholder="3구 하이런"
-      />
-
-      <input
-        id="s_place"
-        placeholder="당구장"
-      />
-
-    </div>
-
-    <div class="button-row">
-
-      <button onclick="signup()">
-        가입하기
-      </button>
-
-      <button onclick="showLogin()">
-        뒤로가기
-      </button>
-
-    </div>
-
-  </div>
-
 </section>
+
+</div>

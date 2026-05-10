@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>회원가입 | CHIKKA</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <style>
+      body {
+        margin: 0;
+
+        min-height: 100vh;
+
+        background: #020817;
+
+        font-family: Pretendard, sans-serif;
+      }
+
+      .page-wrap {
+        min-height: 100vh;
+
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+
+        padding: 120px 20px 40px;
+      }
+
+      .signup-wrap {
+        width: 100%;
+        max-width: 460px;
+
+        padding: 40px;
+
+        border-radius: 24px;
+
+        background: #0f172a;
+
+        box-sizing: border-box;
+
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      }
+
+      h1 {
+        margin-top: 0;
+        margin-bottom: 28px;
+
+        text-align: center;
+
+        color: white;
+
+        font-size: 32px;
+      }
+
+      .grid-form {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+      }
+
+      input {
+        width: 100%;
+
+        height: 48px;
+
+        padding: 0 14px;
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        border-radius: 12px;
+
+        background: rgba(255, 255, 255, 0.05);
+
+        color: white;
+
+        font-size: 15px;
+
+        box-sizing: border-box;
+
+        outline: none;
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .button-row {
+        display: flex;
+
+        gap: 12px;
+
+        margin-top: 24px;
+      }
+
+      button {
+        flex: 1;
+
+        height: 48px;
+
+        border: none;
+
+        border-radius: 12px;
+
+        background: #2563eb;
+
+        color: white;
+
+        font-size: 16px;
+        font-weight: 600;
+
+        cursor: pointer;
+      }
+
+      .back-btn {
+        background: rgba(255, 255, 255, 0.08);
+      }
+    </style>
+
+    <!-- FIREBASE -->
+    <script type="module">
+      import { firebaseConfig } from "../firebase-config.js";
+
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+      import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      const app = initializeApp(firebaseConfig);
+
+      window.db = getFirestore(app);
+
+      window.auth = getAuth(app);
+    </script>
+  </head>
+
+  <body>
+    <!-- HEADER INCLUDE -->
+    <div id="header-container"></div>
+
+    <!-- PAGE -->
+    <div class="page-wrap">
+      <div class="signup-wrap">
+        <h1>회원가입</h1>
+
+        <div class="grid-form">
+          <input id="s_id" placeholder="아이디" />
+
+          <input id="s_name" placeholder="닉네임" />
+
+          <input id="s_pw" type="password" placeholder="비밀번호" />
+
+          <input id="s_score4" placeholder="4구 점수" />
+
+          <input id="s_score3" placeholder="3구 점수" />
+
+          <input id="s_hr4" placeholder="4구 하이런" />
+
+          <input id="s_hr3" placeholder="3구 하이런" />
+
+          <input id="s_place" placeholder="당구장" />
+        </div>
+
+        <div class="button-row">
+          <button onclick="signup()">가입하기</button>
+
+          <button class="back-btn" onclick="location.href = '../index.html'">
+            뒤로가기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INCLUDE -->
+    <script type="module" src="../js/include.js"></script>
+
+    <!-- AUTH -->
+    <script type="module" src="../js/auth.js"></script>
+  </body>
+</html>
